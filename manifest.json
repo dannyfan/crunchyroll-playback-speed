@@ -17,6 +17,6 @@
           "js": ["playback.js"]
         }
       ],
-    "permissions": ["activeTab", "declarativeContent"],
+    "permissions": ["activeTab", "declarativeContent", "storage"],
     "manifest_version" : 2
 }

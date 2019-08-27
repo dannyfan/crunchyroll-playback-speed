@@ -1,11 +1,15 @@
 window.onload = function() {
-    document.addEventListener('keydown', function(e) {
-        e.preventDefault();
-        const videoPlayer = document.querySelector('#player_html5_api');
-        if (videoPlayer !== null) {
+    const videoPlayer = document.querySelector('#player_html5_api');
+    if (videoPlayer != null) {
+        videoPlayer.addEventListener('loadeddata', function() {
+            getOrUpdatePlaybackValue(this, '');   
+        });
+
+        document.addEventListener('keydown', function(e) {
+            e.preventDefault();
             videoControls(videoPlayer, e);
-        }
-    });
+        });
+    }
 }
 
 function videoControls(videoPlayer, e) {
@@ -14,6 +18,7 @@ function videoControls(videoPlayer, e) {
         let value = (e.keyCode == 40) ? -0.25 : 0.25;
         let newPlaybackRate = videoPlayer.playbackRate + value;
         videoPlayer.playbackRate = checkLimit(newPlaybackRate);
+        getOrUpdatePlaybackValue(videoPlayer, checkLimit(newPlaybackRate));
     }
 }
 
@@ -23,3 +28,13 @@ function checkLimit(playbackRate) {
     playbackRate = playbackRate > 2 ? 2.0 : playbackRate;
     return playbackRate;
 }
+
+function getOrUpdatePlaybackValue(videoPlayer, playbackValue) {
+    if (playbackValue) {
+        localStorage.setItem('cr_playback_speed', playbackValue);
+    } else {
+        let existingSpeed = localStorage.getItem('cr_playback_speed');
+        videoPlayer.playbackRate = (existingSpeed) === null ? 1.0 : checkLimit(existingSpeed);
+    }
+    return;
+};

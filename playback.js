@@ -1,13 +1,25 @@
 window.onload = function() {
     const videoPlayer = document.querySelector('#player_html5_api');
+    const crLocal= JSON.parse(localStorage.ajs_user_traits);
     if (videoPlayer != null) {
         videoPlayer.addEventListener('loadeddata', function() {
-            getOrUpdatePlaybackValue(this, '');   
+            getOrUpdatePlaybackValue(this, '');
+            getVideoSiblings(this);
         });
 
         document.addEventListener('keydown', function(e) {
             e.preventDefault();
             videoControls(videoPlayer, e);
+        });
+    }
+    
+    if (crLocal) {
+        getVideoSiblings(crLocal);
+
+        document.addEventListener('keydown', function(e) {
+            e.preventDefault();
+
+            videoControls('', e);
         });
     }
 }
@@ -30,6 +42,12 @@ function videoControls(videoPlayer, e) {
         videoPlayer.playbackRate = 1.0;
         getOrUpdatePlaybackValue(videoPlayer, 1.0);
         showPlaybackRateValue(videoPlayer, 1.0);
+    } else if (e.shiftKey && (e.keyCode == 39 || e.keyCode == 37)) {
+        let videoType = (e.keyCode == 39) ? 'cr_next_video' : 'cr_prev_video';
+        const videoLink = localStorage.getItem(videoType);
+        if (videoLink) {
+            document.location = videoLink;
+        }
     }
 }
 
@@ -81,3 +99,20 @@ function getOrUpdatePlaybackValue(videoPlayer, playbackValue) {
     }
     return;
 };
+
+function getVideoSiblings(crLocal) {
+    const url = crLocal.referrer;
+    if (url) {
+        const urlArr = url.split('-');
+        const epID = urlArr.pop();
+        const videoContainer = document.querySelector(`div[media_id="${epID}"]`);
+        const prevVideoID = videoContainer.previousElementSibling.getAttribute('media_id');
+        const nextVideoID = videoContainer.nextElementSibling.getAttribute('media_id');
+        if (prevVideoID) {
+            localStorage.setItem('cr_prev_video', urlArr.join('-') + '-' + prevVideoID);
+        }
+        if (nextVideoID) {
+            localStorage.setItem('cr_next_video', urlArr.join('-') + '-' + nextVideoID);
+        }
+    }
+}

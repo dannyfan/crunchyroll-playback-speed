@@ -1,5 +1,5 @@
 window.onload = function() {
-    const videoPlayer = document.querySelector('#player_html5_api');
+    const videoPlayer = document.querySelector('video');
     if (videoPlayer != null) {
         videoPlayer.addEventListener('loadeddata', function() {
             getOrUpdatePlaybackValue(this, '');   

@@ -3,10 +3,9 @@
     "version" : "1.2.0",
     "description" : "Extension to change Crunchyroll's video playback speed.",
     "background": {
-        "scripts": ["background.js"],
-        "persistent": false
+        "service_worker": "background.js"
     },
-    "page_action": {
+    "action": {
         "default_popup": "popup.html"
     },
     "content_scripts": [
@@ -18,5 +17,5 @@
         }
       ],
     "permissions": ["activeTab", "declarativeContent", "storage"],
-    "manifest_version" : 2
+    "manifest_version" : 3
 }

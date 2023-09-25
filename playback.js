@@ -63,7 +63,7 @@ function showPlaybackRateValue(videoPlayer, playbackRate) {
  */
 function checkLimit(playbackRate) {
     playbackRate = playbackRate < 0 ? 1.0 : playbackRate;
-    playbackRate = playbackRate > 2 ? 2.0 : playbackRate;
+    playbackRate = playbackRate > 5 ? 2.0 : playbackRate;
     return playbackRate;
 }
 
